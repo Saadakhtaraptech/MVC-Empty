@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Saad.Models;
+using Saad.Models.Entity;
 using System.Diagnostics;
 using WebApplication_Empty.Data;
 
@@ -22,6 +23,19 @@ namespace Saad.Controllers
             return View(users);
         }
 
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(User user)
+        {
+            _Context.users.Add(user);
+            _Context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        
         public IActionResult Privacy()
         {
             return View();
