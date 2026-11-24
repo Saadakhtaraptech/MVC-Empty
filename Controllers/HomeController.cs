@@ -84,6 +84,21 @@ namespace Saad.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+
+        public IActionResult Details(int id)
+        {
+            var Findusers = _Context.users.Find(id);
+
+            //if (Findusers == null)
+            //{
+            //    return NotFound();
+            //}
+
+            return View(Findusers);
+        }
+
+
         public IActionResult Privacy()
         {
             return View();
