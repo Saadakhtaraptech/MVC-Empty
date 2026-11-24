@@ -1,8 +1,9 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Saad.Models;
 using Saad.Models.Entity;
-using System.Diagnostics;
 using WebApplication_Empty.Data;
+using System.Diagnostics;
 
 namespace Saad.Controllers
 {
@@ -11,7 +12,7 @@ namespace Saad.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _Context;
 
-        public HomeController(ILogger<HomeController> logger,ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
             _Context = context;
@@ -27,6 +28,7 @@ namespace Saad.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult Create(User user)
         {
@@ -35,7 +37,53 @@ namespace Saad.Controllers
             return RedirectToAction("Index");
         }
 
-        
+        public IActionResult Edit(int id)
+        {
+            var user = _Context.users.Find(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(User user)
+        {
+            _Context.users.Update(user);
+            _Context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var FindUser = _Context.users.Find(id);
+
+            if (FindUser == null)
+            {
+                return NotFound();
+            }
+
+            return View(FindUser);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id, User user)
+        {
+            var FindUser = _Context.users.Find(id);
+
+            if (FindUser != null)
+            {
+                _Context.users.Remove(FindUser);
+                _Context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
         public IActionResult Privacy()
         {
             return View();
@@ -44,7 +92,10 @@ namespace Saad.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            });
         }
     }
 }
